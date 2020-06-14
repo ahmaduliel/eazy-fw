@@ -3,7 +3,6 @@
 
 void UVLight::init(uint8_t pin, bool inverted)
 {
-    m_enabled = true;
     m_pin = pin;
     m_inverted = inverted;
     pinMode(m_pin, OUTPUT);
@@ -23,13 +22,12 @@ void UVLight::handler()
 {
     if(m_inverted)
     {
-        m_enabled = !m_state;
+        m_state = !m_enabled;
         
     }
     else
     {
-        m_enabled = m_state;
+        m_state = m_enabled;
     }
-    
     digitalWrite(m_pin,m_state);
 }

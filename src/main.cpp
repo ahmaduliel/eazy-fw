@@ -1,21 +1,29 @@
 #include <Arduino.h>
 #include <DFPlayer_Mini_Mp3.h>
-#include <dht_nonblocking.h>
 #include <LiquidCrystal.h>
 #include <SoftwareSerial.h>
 #include <UVLight.h>
-
-#define DHTTYPE DHT_TYPE_21
-#define DHTPIN 20
+#include <SoundMan.h>
+#include <FlowState.h>
 
 SoftwareSerial serialSW(34, 35);
-DHT_nonblocking dht(DHTPIN, DHTTYPE);
 LiquidCrystal lcd(26, 27, 28, 29, 30, 31);
 
+SoundMan Sound;
+UVLight UVControl;
+FlowState State;
+
 void setup() {
-  // put your setup code here, to run once:
+  Serial.begin(9600);
+  Serial.println("Setup Start...");
+  lcd.begin(16,2);
+  Sound.init(&serialSW, 9600, 20, 66);
+  UVControl.init(32, false);
+  State.init(&lcd, 200, &Sound, &UVControl, 5000, 25);
+  Serial.println("Setup Complete..");
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  State.handler();
+  UVControl.handler();
 }
